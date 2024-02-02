@@ -83,9 +83,9 @@ def is_pareto_efficient(valuations: List[List[float]], allocations: List[List[fl
     negative_cycle = nx.negative_edge_cycle(nx_graph, weight='weight')
     # find_improve_pareto_efficient(neg_cycle_bellman_ford(nx_graph, list(graph.nodes)[0].name),valuations,allocations)
 
-    if negative_cycle is not None:
-        print("Negative cycle detected.")
-        print(neg_cycle_bellman_ford(nx_graph, list(graph.nodes)[0].name))
+    # if negative_cycle is not None:
+    #     print("Negative cycle detected.")
+    #     print(neg_cycle_bellman_ford(nx_graph, list(graph.nodes)[0].name))
 
     return not negative_cycle  # If no negative weight cycle, return True
 
@@ -201,8 +201,11 @@ def find_edge_to_next_node(node, cycle_nodes, index):
 
 
 if __name__ == "__main__":
-    valuations = [[3,1,6], [6,3,1], [1,6,3]]
-    allocations = [[1,0,0], [0,1,0], [0,0,1]]
+    # valuations = [[3,1,6], [6,3,1], [1,6,3]]
+    # allocations = [[1,0,0], [0,1,0], [0,0,1]]
+    #
+    # result = is_pareto_efficient(valuations, allocations)
+    # print(result)
 
-    result = is_pareto_efficient(valuations, allocations)
-    print(result)
+    import doctest
+    doctest.testmod()
