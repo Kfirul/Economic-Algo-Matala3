@@ -63,35 +63,7 @@ def is_pareto_efficient(valuations: List[List[float]], allocations: List[List[fl
     return not negative_cycle  # If no negative weight cycle, return True
 
 #Part B
-def improve_pareto(valuations: list[list[float]], allocation: list[list[float]]):
-    num_players = len(valuations)
-    num_resources = len(valuations[0])
 
-    improved_allocation = [row.copy() for row in allocation]
-    epsilon = 0.1
-
-    while not is_pareto_efficient(valuations, improved_allocation):
-        print("======================================================")
-        current = create_exchange_graph(valuations, improved_allocation)
-        print(current.edges(data=True))
-        # Iterate through each player
-        denominator = 1
-        for i in range(num_players):
-            print("----------------------------------------------")
-            positive_allocation_resources = [k for k in range(num_resources) if improved_allocation[i][k] > epsilon]
-
-            # If there are positive allocation resources, choose the one with the minimum valuation
-            if positive_allocation_resources:
-                min_valuation_resource = min(positive_allocation_resources, key=lambda k: valuations[i][k])
-
-            # Transfer a small portion (εx) of the minimum valuation resource to the next player
-            epsilon_x = min(improved_allocation[i][min_valuation_resource], epsilon)  # Adjust this value as needed
-            improved_allocation[i][min_valuation_resource] -= epsilon_x * denominator
-            weight_i_to_i_plus_1 = current.get_edge_data(f"Player_{i}", f"Player_{(i + 1) % num_players}")['weight']
-            denominator *= weight_i_to_i_plus_1
-            improved_allocation[(i + 1) % num_players][min_valuation_resource] += (epsilon_x * denominator)
-
-    return improved_allocation
 
     def find_positive_allocation_resources(player_allocation: List[float], epsilon: float) -> List[int]:
         return [resource_idx for resource_idx, allocation in enumerate(player_allocation) if allocation >= epsilon]
