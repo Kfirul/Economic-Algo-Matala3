@@ -2,6 +2,7 @@ import networkx as nx
 import math
 from typing import List
 
+#Part A
 def create_exchange_graph(valuations: List[List[float]], allocations: List[List[float]]) -> nx.DiGraph:
     """
     Build a directed graph representing the allocation scenario.
@@ -61,7 +62,7 @@ def is_pareto_efficient(valuations: List[List[float]], allocations: List[List[fl
 
     return not negative_cycle  # If no negative weight cycle, return True
 
-
+#Part B
 def improve_pareto(valuations: list[list[float]], allocation: list[list[float]]):
     num_players = len(valuations)
     num_resources = len(valuations[0])
@@ -69,7 +70,7 @@ def improve_pareto(valuations: list[list[float]], allocation: list[list[float]])
     improved_allocation = [row.copy() for row in allocation]
     epsilon = 0.1
 
-    while not par(valuations, improved_allocation):
+    while not is_pareto_efficient(valuations, improved_allocation):
         print("======================================================")
         current = create_exchange_graph(valuations, improved_allocation)
         print(current.edges(data=True))
