@@ -1,43 +1,43 @@
-def find_decomposition(budget: list[float], preferences: list[set[int]]) -> dict:
-    total_budget = sum(budget)
-    num_players = len(budget)
+def find_decomposition(itemCost: list[float], preferences: list[set[int]]) -> dict:
+    total_budget = sum(itemCost)
+    num_players = len(preferences)
 
-    # Check if the total budget is divisible by the number of players
-    if total_budget % num_players != 0:
-        return None  # Decomposition is not possible
+    budget_players = [total_budget // num_players] * len(preferences)
 
-    # Calculate the share of each player
-    player_share = total_budget / num_players
 
     # Initialize the result dictionary to store the budget allocation for each player
     result = {i: {} for i in range(num_players)}
 
-    # Iterate through each item
-    for item in range(len(budget)):
-        item_cost = budget[item]
 
-        # Find the players who support the current item
-        supporting_players = [player for player, preference in enumerate(preferences) if item + 1 in preference]
+    # Iterate through each item
+    for item in range(len(itemCost)):
+        item_cost = itemCost[item]
+
+        # Find the players who support the current item, excluding those with zero budgets
+        supporting_players = [player for player, preference in enumerate(preferences) if item in preference and budget_players[player] > 0]
 
         # Divide the cost of the item among supporting players
-        share_per_player = item_cost / len(supporting_players) if supporting_players else 0
+        share_per_player = item_cost / len(supporting_players) if supporting_players else "Not decomposition"
 
         # Allocate the share to each supporting player and deduct from their budget
         for player in supporting_players:
-            result[player][item + 1] = share_per_player
-            budget[player] -= share_per_player
+            result[player][item] = share_per_player
 
-    # Adjust the allocations to ensure that all the budget is utilized
-    for player in range(num_players):
-        remaining_budget = player_share - sum(result[player].values())
-        if remaining_budget > 0:
-            result[player][item + 1] += remaining_budget
+            # Deduct from budget only if the player has a non-zero budget
+            if budget_players[player] > 0:
+                budget_players[player] -= share_per_player
 
     return result
 
 # Example usage:
-budget = [100, 200, 150]
-preferences = [{1, 2}, {2, 3}, {1, 3}]
+itemCosts = [100, 200, 150]
+preferences = [{0, 1}, {1, 2}, {0, 2}]
 
-result = find_decomposition(budget, preferences)
+result = find_decomposition(itemCosts, preferences)
+print(result)
+
+itemCosts = [400, 50, 50, 0]
+preferences = [{0, 1}, {0, 2}, {0, 3}, {1, 2}, {0}]
+
+result = find_decomposition(itemCosts, preferences)
 print(result)
